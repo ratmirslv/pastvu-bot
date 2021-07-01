@@ -1,0 +1,49 @@
+{
+  "name": "pastvu-bot",
+  "version": "0.1.0",
+  "description": "Get historical photos in Pastvu",
+  "main": "index.js",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "prebuild": "rimraf ./build/*",
+    "build": "tsc",
+    "start": "cross-env NODE_ENV=production node build/index.js",
+    "dev": "tsc-watch --onSuccess \"cross-env NODE_ENV=development DEBUG=telegraf:* node build/index.js\"",
+    "validate": "npm run check-format && npm run check-types && npm run lint",
+    "check-format": "prettier src *.{js,json} --check",
+    "lint": "eslint --ext .js,.ts src",
+    "check-types": "tsc --noEmit"
+  },
+  "author": "Ratmir Aitov <ratmirslv@gmail.com>",
+  "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv-safe": "^8.2.0",
+    "node-fetch": "^2.6.1",
+    "telegraf": "^4.3.0"
+  },
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/lodash": "^4.14.170",
+    "@types/node": "^15.12.4",
+    "@types/node-fetch": "^2.5.10",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
+    "copyfiles": "^2.4.1",
+    "eslint": "^7.29.0",
+    "eslint-plugin-import": "^2.23.4",
+    "prettier": "^2.3.1",
+    "pretty-quick": "^3.1.1",
+    "rimraf": "^3.0.2",
+    "simple-git-hooks": "^2.4.1",
+    "tsc-watch": "^4.4.0",
+    "typescript": "^4.3.4"
+  }
+}
