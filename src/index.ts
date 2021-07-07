@@ -1,18 +1,25 @@
 import 'dotenv-safe/config'
-import { Telegraf, Scenes, session, Markup } from 'telegraf'
+import { Telegraf, Scenes, session, Markup, Context } from 'telegraf'
 
 import * as commands from './commands'
+import { PastvuItem } from './helpers/getPastvuPhotos'
 import { pastvu } from './scenes/pastvu'
 
 if (process.env.BOT_TOKEN === undefined) {
 	throw new TypeError('BOT_TOKEN must be provided!')
 }
+interface BotSceneSession extends Scenes.SceneSessionData {
+	pastvuData: PastvuItem[][] | undefined
+	counterData: number
+}
 
-export type BotContext = Scenes.SceneContext
+export interface ContextBot extends Context {
+	scene: Scenes.SceneContextScene<ContextBot, BotSceneSession>
+}
 
-const bot = new Telegraf<BotContext>(process.env.BOT_TOKEN)
+const bot = new Telegraf<ContextBot>(process.env.BOT_TOKEN)
 
-const stage = new Scenes.Stage([pastvu])
+const stage = new Scenes.Stage<ContextBot>([pastvu])
 
 //TODO: https://github.com/telegraf/telegraf/issues/1372
 bot.use(session())
@@ -24,21 +31,13 @@ async function main() {
 		ctx.reply(
 			'Отправьте местоположение, для получения фотографий',
 			Markup.keyboard([
-				Markup.button.locationRequest('Отправить местоположение'),
+				Markup.button.locationRequest('🧭 Отправить местоположение'),
+				Markup.button.callback('🔍 Еще фотографий', 'morePhotos'),
 			]).resize(),
 		),
 	)
 
 	bot.help(commands.help)
-
-	bot.on('text', (ctx) =>
-		ctx.reply(
-			'Отправьте местоположение, для получения фотографий',
-			Markup.keyboard([
-				Markup.button.locationRequest('Отправить местоположение'),
-			]).resize(),
-		),
-	)
 
 	bot.on('location', (ctx) => ctx.scene.enter('pastvu'))
 

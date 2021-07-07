@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 
-type PastvuItem = {
+export type PastvuItem = {
 	ccount: number
 	cid: number
 	dir: string
@@ -14,13 +14,12 @@ type PastvuItem = {
 export type PastvuPhotos = {
 	result: { photos: PastvuItem[] }
 }
-
 export const getPastvuPhotos = async (
 	latitude: number,
 	longitude: number,
 ): Promise<PastvuPhotos> => {
 	const response = await fetch(
-		`https://pastvu.com/api2?method=photo.giveNearestPhotos&params={"geo":[${latitude}, ${longitude}],"limit":5}`,
+		`https://pastvu.com/api2?method=photo.giveNearestPhotos&params={"geo":[${latitude}, ${longitude}]}`,
 	)
 
 	if (!response.ok) {
