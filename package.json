@@ -26,6 +26,7 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "dotenv-safe": "^8.2.0",
+    "lodash": "^4.17.21",
     "node-fetch": "^2.6.1",
     "telegraf": "^4.3.0"
   },
@@ -39,7 +40,6 @@
     "copyfiles": "^2.4.1",
     "eslint": "^7.29.0",
     "eslint-plugin-import": "^2.23.4",
-    "lodash": "^4.17.21",
     "prettier": "^2.3.1",
     "pretty-quick": "^3.1.1",
     "rimraf": "^3.0.2",
