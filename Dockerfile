@@ -6,7 +6,7 @@ RUN npm install -g npm@6.14.13
 
 COPY package*.json ./
 
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 
 COPY . .
 
