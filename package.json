@@ -18,33 +18,31 @@
   },
   "author": "Ratmir Aitov <ratmirslv@gmail.com>",
   "license": "ISC",
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
+  "simple-git-hooks": {
+    "pre-commit": "npx pretty-quick --staged"
   },
   "dependencies": {
     "cross-env": "^7.0.3",
     "dotenv-safe": "^8.2.0",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.1",
-    "telegraf": "^4.3.0"
+    "telegraf": "^4.4.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.14.5",
-    "@types/lodash": "^4.14.170",
-    "@types/node": "^15.12.4",
-    "@types/node-fetch": "^2.5.10",
-    "@typescript-eslint/eslint-plugin": "^4.28.0",
-    "@typescript-eslint/parser": "^4.28.0",
+    "@types/lodash": "^4.14.171",
+    "@types/node": "^16.3.3",
+    "@types/node-fetch": "^2.5.11",
+    "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@typescript-eslint/parser": "^4.28.4",
     "copyfiles": "^2.4.1",
-    "eslint": "^7.29.0",
+    "eslint": "^7.31.0",
     "eslint-plugin-import": "^2.23.4",
-    "prettier": "^2.3.1",
+    "prettier": "^2.3.2",
     "pretty-quick": "^3.1.1",
     "rimraf": "^3.0.2",
-    "simple-git-hooks": "^2.4.1",
+    "simple-git-hooks": "^2.5.1",
     "tsc-watch": "^4.4.0",
-    "typescript": "^4.3.4"
+    "typescript": "^4.3.5"
   }
 }
