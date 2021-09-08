@@ -8,13 +8,14 @@
   },
   "scripts": {
     "prebuild": "rimraf ./build/*",
-    "build": "tsc",
+    "build": "tsc && npm run copyFiles",
     "start": "cross-env NODE_ENV=production node build/index.js",
-    "dev": "tsc-watch --onSuccess \"cross-env NODE_ENV=development DEBUG=telegraf:* node build/index.js\"",
+    "dev": "npm run copyFiles && tsc-watch --onSuccess \"cross-env NODE_ENV=development DEBUG=telegraf:* node build/index.js\"",
     "validate": "npm run check-format && npm run check-types && npm run lint",
     "check-format": "prettier src *.{js,json} --check",
     "lint": "eslint --ext .js,.ts src",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "copyFiles": "copyfiles --error --up 1 ./src/db/*.* ./build/db"
   },
   "author": "Ratmir Aitov <ratmirslv@gmail.com>",
   "license": "ISC",
@@ -26,7 +27,8 @@
     "dotenv-safe": "^8.2.0",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.2",
-    "telegraf": "^4.4.1"
+    "telegraf": "^4.4.1",
+    "telegraf-session-local": "^2.1.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.15.0",
