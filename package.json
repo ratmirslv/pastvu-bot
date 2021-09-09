@@ -1,6 +1,6 @@
 {
   "name": "pastvu-bot",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Get historical photos in Pastvu",
   "main": "index.js",
   "engines": {
