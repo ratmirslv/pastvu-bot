@@ -15,7 +15,7 @@
     "check-format": "prettier src *.{js,json} --check",
     "lint": "eslint --ext .js,.ts src",
     "check-types": "tsc --noEmit",
-    "copyFiles": "copyfiles --error --up 1 ./src/db/*.* ./build/db"
+    "copyFiles": "copyfiles --error --up 1 ./db/*.* ./build/db"
   },
   "author": "Ratmir Aitov <ratmirslv@gmail.com>",
   "license": "ISC",
