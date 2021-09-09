@@ -11,15 +11,22 @@ export type PastvuItem = {
 	s: number
 }
 
+type PropsGetPastvuPhotos = {
+	latitude: number
+	longitude: number
+	startYear: number
+	endYear: number
+}
+
 export type PastvuPhotos = {
 	result: { photos: PastvuItem[] }
 }
 export const getPastvuPhotos = async (
-	latitude: number,
-	longitude: number,
+	props: PropsGetPastvuPhotos,
 ): Promise<PastvuPhotos> => {
+	const { latitude, longitude, startYear, endYear } = props
 	const response = await fetch(
-		`https://pastvu.com/api2?method=photo.giveNearestPhotos&params={"geo":[${latitude}, ${longitude}]}`,
+		`https://pastvu.com/api2?method=photo.giveNearestPhotos&params={"geo":[${latitude}, ${longitude}],"year":${startYear},"year2":${endYear}}`,
 	)
 
 	if (!response.ok) {

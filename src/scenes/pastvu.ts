@@ -12,13 +12,21 @@ pastvu.enter(async (ctx) => {
 	if (ctx?.message && 'location' in ctx.message) {
 		const { latitude, longitude } = ctx.message.location
 		ctx.scene.session.pastvuData = undefined
-
+		const startYear = ctx.data.startYear || 1839
+		const endYear = ctx.data.endYear || 2000
 		try {
-			const { result } = await getPastvuPhotos(latitude, longitude)
+			const { result } = await getPastvuPhotos({
+				latitude,
+				longitude,
+				startYear,
+				endYear,
+			})
 
 			if (result.photos.length === 0) {
 				await ctx.scene.leave()
-				return await ctx.reply('Фотографии в данной локации не найдены.')
+				return await ctx.reply(
+					'Фотографии в данной локации не найдены. Попробуйте изменить период.',
+				)
 			}
 
 			const [firstChunk, ...otherChunks] = chunk(result.photos, 5)
@@ -48,7 +56,9 @@ pastvu.hears('🔍 Еще фотографий', async (ctx) => {
 			await sendPhotos(ctx, ctx.scene.session.pastvuData[ctx.scene.session.counterData])
 			ctx.scene.session.counterData += 1
 		} else {
-			await ctx.reply(`Больше фотографий в данной локации нет`)
+			await ctx.reply(
+				`Больше фотографий в данной локации нет. Попробуйте изменить период.`,
+			)
 			await ctx.scene.leave()
 		}
 	} catch (err) {
