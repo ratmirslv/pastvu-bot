@@ -60,7 +60,14 @@ async function main() {
 
 	bot.hears('⚙️ Настройки', (ctx) => ctx.scene.enter('settings'))
 
-	await bot.launch()
+	await bot.launch({
+		webhook: process.env.WEBHOOK_URL
+			? {
+					port: process.env.PORT ? Number(process.env.PORT) : 8080,
+					hookPath: process.env.WEBHOOK_URL,
+			  }
+			: undefined,
+	})
 }
 main().catch((err) => {
 	throw err
