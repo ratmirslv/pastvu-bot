@@ -64,7 +64,7 @@ async function main() {
 		webhook: process.env.WEBHOOK_URL
 			? {
 					port: process.env.PORT ? Number(process.env.PORT) : 8080,
-					hookPath: process.env.WEBHOOK_URL,
+					domain: process.env.WEBHOOK_URL,
 			  }
 			: undefined,
 	})
