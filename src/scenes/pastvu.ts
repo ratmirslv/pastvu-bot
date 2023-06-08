@@ -24,9 +24,7 @@ pastvu.enter(async (ctx) => {
 
 			if (result.photos.length === 0) {
 				await ctx.scene.leave()
-				return await ctx.reply(
-					'Фотографии в данной локации не найдены. Попробуйте изменить период.',
-				)
+				return await ctx.reply(ctx.i18n.t('emptyPhotos'))
 			}
 
 			const [firstChunk, ...otherChunks] = chunk(result.photos, 5)
@@ -40,14 +38,14 @@ pastvu.enter(async (ctx) => {
 			ctx.scene.session.counterData = 0
 		} catch (err) {
 			if (err instanceof Error) {
-				return await ctx.reply(`Ошибка. ${err.message}`)
+				return await ctx.reply(`${ctx.i18n.t('errors.error')} ${err.message}`)
 			}
-			await ctx.reply(`Ошибка, попробуйте еще раз.`)
+			await ctx.reply(ctx.i18n.t('errors.errorLetsTry'))
 		}
 	}
 })
 
-pastvu.hears('🔍 Еще фотографий', async (ctx) => {
+pastvu.hears(new RegExp('🔍'), async (ctx) => {
 	try {
 		if (
 			ctx.scene.session.pastvuData &&
@@ -56,15 +54,12 @@ pastvu.hears('🔍 Еще фотографий', async (ctx) => {
 			await sendPhotos(ctx, ctx.scene.session.pastvuData[ctx.scene.session.counterData])
 			ctx.scene.session.counterData += 1
 		} else {
-			await ctx.reply(
-				`Больше фотографий в данной локации нет. Попробуйте изменить период.`,
-			)
-			await ctx.scene.leave()
+			await ctx.reply(ctx.i18n.t('emptyPhotos'))
 		}
 	} catch (err) {
 		if (err instanceof Error) {
-			return await ctx.reply(`Ошибка. ${err.message}`)
+			return await ctx.reply(`${ctx.i18n.t('errors.error')} ${err.message}`)
 		}
-		await ctx.reply(`Ошибка, попробуйте еще раз.`)
+		await ctx.reply(ctx.i18n.t('errors.errorLetsTry'))
 	}
 })

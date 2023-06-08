@@ -5,7 +5,7 @@ import { Scenes, Markup } from 'telegraf'
 import { ContextBot } from '../index'
 
 export const settings = new Scenes.BaseScene<ContextBot>('settings')
-//период с 1839 по 2000 год
+//photography period from 1839 to 2000
 const REGEX_YEARS = /^(18[3-9][0-9]|19\d{2}|2000)-(18[3-9][0-9]|19\d{2}|2000)$/g
 
 settings.enter(async (ctx) => {
@@ -15,7 +15,10 @@ settings.enter(async (ctx) => {
 		ctx.data.history = ctx.data.history || []
 
 		await ctx.reply(
-			`Добро пожаловать в настройки. Текущий период:${ctx.data.startYear}-${ctx.data.endYear}\nВыберите даты из истории, или введите период в формате: 1941-1945\nP.S. Нижняя  и верхняя граница - 1839 и 2000`,
+			ctx.i18n.t('settingsInfo', {
+				startYear: ctx.data.startYear,
+				endYear: ctx.data.endYear,
+			}),
 			Markup.inlineKeyboard(
 				ctx.data.history.map(
 					(range) =>
@@ -29,7 +32,7 @@ settings.enter(async (ctx) => {
 		)
 	} catch (err) {
 		if (err instanceof Error) {
-			return await ctx.reply(`Ошибка сохранения настроек. ${err.message}`)
+			return await ctx.reply(`${ctx.i18n.t('errors.errorSave')} ${err.message}`)
 		}
 	}
 })
@@ -40,9 +43,7 @@ async function handlerYearsAction(
 ) {
 	try {
 		if (parseStartYear > parseEndYear) {
-			return await ctx.reply(
-				`Ошибка, дата окончания должна быть больше или равна даты начала`,
-			)
+			return await ctx.reply(ctx.i18n.t('errors.errorSetPeriod'))
 		}
 		ctx.data.history = uniqWith(
 			[...ctx.data.history, { startYear: ctx.data.startYear, endYear: ctx.data.endYear }],
@@ -53,10 +54,10 @@ async function handlerYearsAction(
 		ctx.data.startYear = parseStartYear
 		ctx.data.endYear = parseEndYear
 
-		return await ctx.reply('Все отлично. Новый период назначен.')
+		return await ctx.reply(ctx.i18n.t('successSetPeriod'))
 	} catch (err) {
 		if (err instanceof Error) {
-			return await ctx.reply(`Ошибка сохранения настроек. ${err.message}`)
+			return await ctx.reply(`${ctx.i18n.t('errors.errorSave')} ${err.message}`)
 		}
 	}
 }

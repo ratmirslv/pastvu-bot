@@ -1,10 +1,13 @@
 import 'dotenv-safe/config'
-import { Telegraf, Scenes, session, Markup, Context } from 'telegraf'
+import { Telegraf, Scenes, session, Context } from 'telegraf'
 import { message } from 'telegraf/filters'
+import TelegrafI18n from 'telegraf-i18n'
 import TelegrafSessionLocal from 'telegraf-session-local'
 
 import * as commands from './commands'
+import { createKeyboard } from './helpers/createKeyboard'
 import { PastvuItem } from './helpers/getPastvuPhotos'
+import i18n from './i18n'
 import { pastvu, settings } from './scenes'
 
 if (process.env.BOT_TOKEN === undefined) {
@@ -27,6 +30,7 @@ interface DatabaseData extends YearsRange {
 export interface ContextBot extends Context {
 	scene: Scenes.SceneContextScene<ContextBot, BotSceneSession>
 	data: DatabaseData
+	i18n: TelegrafI18n
 }
 
 const bot = new Telegraf<ContextBot>(process.env.BOT_TOKEN)
@@ -39,26 +43,33 @@ const localSession = new TelegrafSessionLocal({
 
 bot.use(localSession.middleware('data'))
 bot.use(session())
-
+bot.use(i18n.middleware())
 bot.use(stage.middleware())
 
 async function main() {
 	bot.start((ctx) => {
-		return ctx.reply(
-			'Отправьте местоположение, для получения фотографий',
-			Markup.keyboard([
-				Markup.button.locationRequest('🧭 Отправить местоположение'),
-				Markup.button.callback('🔍 Еще фотографий', 'morePhotos'),
-				Markup.button.callback('⚙️ Настройки', 'settings'),
-			]).resize(),
-		)
+		return ctx.reply(ctx.i18n.t('start'), createKeyboard(ctx))
 	})
 
 	bot.help(commands.help)
 
-	bot.on(message('location'), (ctx) => ctx.scene.enter('pastvu'))
-
-	bot.hears('⚙️ Настройки', (ctx) => ctx.scene.enter('settings'))
+	bot.on(message('location'), (ctx) =>
+		ctx
+			.reply(ctx.i18n.t('buttons.location'), createKeyboard(ctx))
+			.then(() => ctx.scene.enter('pastvu')),
+	)
+	//we can't use telegraf-i18n/match because handler reacts only with currently selected language
+	//https://github.com/telegraf/telegraf-i18n/issues/21#issuecomment-522180837
+	bot.hears(new RegExp('⚙️'), (ctx) => {
+		return ctx
+			.reply(ctx.i18n.t('buttons.settings'), createKeyboard(ctx))
+			.then(() => ctx.scene.enter('settings'))
+	})
+	bot.hears(new RegExp('🔍'), (ctx) => {
+		return ctx
+			.reply(ctx.i18n.t('buttons.morePhotos'), createKeyboard(ctx))
+			.then(() => ctx.scene.enter('pastvu'))
+	})
 
 	await bot.launch({
 		webhook: process.env.WEBHOOK_URL
