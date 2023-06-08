@@ -1,5 +1,6 @@
 import 'dotenv-safe/config'
 import { Telegraf, Scenes, session, Markup, Context } from 'telegraf'
+import { message } from 'telegraf/filters'
 import TelegrafSessionLocal from 'telegraf-session-local'
 
 import * as commands from './commands'
@@ -36,7 +37,6 @@ const localSession = new TelegrafSessionLocal({
 	database: 'db/settings.json',
 })
 
-//TODO: https://github.com/telegraf/telegraf/issues/1372
 bot.use(localSession.middleware('data'))
 bot.use(session())
 
@@ -56,7 +56,7 @@ async function main() {
 
 	bot.help(commands.help)
 
-	bot.on('location', (ctx) => ctx.scene.enter('pastvu'))
+	bot.on(message('location'), (ctx) => ctx.scene.enter('pastvu'))
 
 	bot.hears('⚙️ Настройки', (ctx) => ctx.scene.enter('settings'))
 
