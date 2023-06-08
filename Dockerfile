@@ -6,7 +6,9 @@ RUN npm install -g npm@9.6.7
 
 COPY package*.json ./
 
-RUN npm ci --legacy-peer-deps
+COPY .npmrc ./
+
+RUN npm ci
 
 COPY . .
 
