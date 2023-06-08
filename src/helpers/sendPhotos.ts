@@ -9,12 +9,12 @@ export const sendPhotos = async (
 		await ctx.replyWithMediaGroup(
 			pastvuData.map((item) => ({
 				media: { url: `https://pastvu.com/_p/d/${item.file}` },
-				caption: `Год ${item.year} ${item.title}`,
+				caption: `${item.year} ${item.title}`,
 				parse_mode: 'HTML',
 				type: 'photo',
 			})),
 		)
 	} catch (error) {
-		throw new Error('Ошибка отправки фотографий')
+		throw new Error(ctx.i18n.t('errors.errorRequestPhotos'))
 	}
 }
