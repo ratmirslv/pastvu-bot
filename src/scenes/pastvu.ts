@@ -8,16 +8,16 @@ import { ContextBot } from '../index'
 
 export const pastvu = new Scenes.BaseScene<ContextBot>('pastvu')
 
-pastvu.enter(async (ctx) => {
-	if (ctx?.message && 'location' in ctx.message) {
-		const { latitude, longitude } = ctx.message.location
+pastvu.enter(async (ctx: ContextBot) => {
+	if (ctx.geo) {
 		ctx.scene.session.pastvuData = undefined
 		const startYear = ctx.data.startYear || 1839
 		const endYear = ctx.data.endYear || 2000
+
 		try {
 			const { result } = await getPastvuPhotos({
-				latitude,
-				longitude,
+				latitude: ctx.geo.latitude,
+				longitude: ctx.geo.longitude,
 				startYear,
 				endYear,
 			})
