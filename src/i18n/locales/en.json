@@ -1,6 +1,6 @@
 {
-	"start": "Submit your location to receive historical photos.",
-	"help": "Hey ${userName}! I am a historical photo sending bot from pastvu.com.\nSend me your location and I will send historical photos that were taken in that location.\nYou can set a specific period for photos in the settings.",
+	"start": "Submit your location or link Google Maps to receive historical photos.",
+	"help": "Hey ${userName}! I am a historical photo sending bot from pastvu.com.\nSend me your location or link Google Maps and I will send historical photos that were taken in that location.\nYou can set a specific period for photos in the settings. There is also the possibility of receiving photos if you send me a Google Maps link.",
 	"emptyPhotos": "There are no photos in this location. Try changing the period or submit a new location.",
 	"successSetPeriod": "A new period has been set.",
 	"settingsInfo": "Current period: ${startYear}-${endYear}\nSelect dates from history, or enter a period in the format: 1941-1945\nP.S. Lower and upper bound - 1839 and 2000.",
@@ -8,7 +8,8 @@
 		"error": "Error.",
 		"errorLetsTry": "Error, please try again.",
 		"errorSave": "Error saving settings.",
-		"errorSetPeriod": "Error, please enter a valid period."
+		"errorSetPeriod": "Error, please enter a valid period.",
+		"errorParseURL": "Something with the link. Try choosing a specific location."
 	},
 	"buttons": {
 		"location": "🧭 Send location",

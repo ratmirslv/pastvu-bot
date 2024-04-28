@@ -11,7 +11,7 @@
   <h1>PastvuBot</h1>
   <h3>Telegram bot that sends historical photos from pastvu.com.
   </h3>
-  <p>Send me your location and I will send historical photos that were taken in that location. You can set a specific period for photos in the settings.</p>
+  <p>Send me your location or link Google Maps and I will send historical photos that were taken in that location. You can set a specific period for photos in the settings.</p>
   <img src="https://github.com/ratmirslv/pastvu-bot/workflows/CI/CD/badge.svg" />
 </div>
 <div align="center" style="width:600px; margin:0 auto" >
