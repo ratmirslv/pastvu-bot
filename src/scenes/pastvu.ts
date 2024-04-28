@@ -3,24 +3,27 @@ import isEmpty from 'lodash/isEmpty'
 import { Scenes } from 'telegraf'
 
 import { getPastvuPhotos } from '../helpers/getPastvuPhotos'
+import { getPastvuRandomPhotos } from '../helpers/getPastvuRandomPhotos'
 import { sendPhotos } from '../helpers/sendPhotos'
 import { ContextBot } from '../index'
 
 export const pastvu = new Scenes.BaseScene<ContextBot>('pastvu')
 
 pastvu.enter(async (ctx: ContextBot) => {
-	if (ctx.geo) {
+	if (ctx.geo || ctx.random) {
 		ctx.scene.session.pastvuData = undefined
 		const startYear = ctx.data.startYear || 1839
 		const endYear = ctx.data.endYear || 2000
 
 		try {
-			const { result } = await getPastvuPhotos({
-				latitude: ctx.geo.latitude,
-				longitude: ctx.geo.longitude,
-				startYear,
-				endYear,
-			})
+			const { result } = ctx.random
+				? await getPastvuRandomPhotos()
+				: await getPastvuPhotos({
+						latitude: ctx.geo.latitude,
+						longitude: ctx.geo.longitude,
+						startYear,
+						endYear,
+				  })
 
 			if (result.photos.length === 0) {
 				await ctx.scene.leave()
@@ -32,10 +35,12 @@ pastvu.enter(async (ctx: ContextBot) => {
 			await sendPhotos(ctx, firstChunk)
 
 			if (isEmpty(otherChunks)) {
+				ctx.random = false
 				await ctx.scene.leave()
 			}
 			ctx.scene.session.pastvuData = otherChunks
 			ctx.scene.session.counterData = 0
+			ctx.random = false
 		} catch (err) {
 			if (err instanceof Error) {
 				return await ctx.reply(`${ctx.i18n.t('errors.error')} ${err.message}`)

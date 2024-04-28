@@ -36,6 +36,7 @@ export interface ContextBot extends Context {
 		latitude: number
 		longitude: number
 	}
+	random: boolean
 }
 
 const bot = new Telegraf<ContextBot>(process.env.BOT_TOKEN)
@@ -83,6 +84,13 @@ async function main() {
 					ctx.geo = ctx.message.location
 				}
 			})
+			.then(() => ctx.scene.enter('pastvu'))
+	})
+
+	bot.hears(new RegExp('🎲'), (ctx: ContextBot) => {
+		return ctx
+			.reply(ctx.i18n.t('buttons.randomPhotos'), createKeyboard(ctx))
+			.then(() => (ctx.random = true))
 			.then(() => ctx.scene.enter('pastvu'))
 	})
 

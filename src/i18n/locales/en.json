@@ -9,10 +9,12 @@
 		"errorLetsTry": "Error, please try again.",
 		"errorSave": "Error saving settings.",
 		"errorSetPeriod": "Error, please enter a valid period.",
-		"errorParseURL": "Something with the link. Try choosing a specific location."
+		"errorParseURL": "Something with the link. Try choosing a specific location.",
+		"errorSendPhotos": "Error sending photos"
 	},
 	"buttons": {
 		"location": "🧭 Send location",
+		"randomPhotos": "🎲 Random photos",
 		"morePhotos": "🔍 More photos",
 		"settings": "⚙️ Settings"
 	}
