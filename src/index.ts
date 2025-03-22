@@ -3,6 +3,7 @@ import { Telegraf, Scenes, session, Context } from 'telegraf'
 import { message } from 'telegraf/filters'
 import TelegrafI18n from 'telegraf-i18n'
 import TelegrafSessionLocal from 'telegraf-session-local'
+import { telegrafThrottler } from 'telegraf-throttler'
 
 import * as commands from './commands'
 import { createKeyboard } from './helpers/createKeyboard'
@@ -51,7 +52,16 @@ bot.use(localSession.middleware('data'))
 bot.use(session())
 bot.use(i18n.middleware())
 bot.use(stage.middleware())
-
+bot.use(
+	telegrafThrottler({
+		out: {
+			minTime: 1000 / 1.2, // 1 message every ~0.83 seconds (to avoid hitting the 1-sec limit)
+			reservoir: 5, // Allows sending up to 5 messages at once (short bursts)
+			reservoirRefreshAmount: 1, // Restores 1 message per second
+			reservoirRefreshInterval: 1000, // Refreshes the limit every second
+		},
+	}),
+)
 async function main() {
 	bot.start((ctx: ContextBot) => {
 		return ctx.reply(ctx.i18n.t('start'), createKeyboard(ctx))
